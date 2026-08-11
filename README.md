@@ -1,208 +1,295 @@
-# Damas Dash
+# Damas Dashboard
 
-> A polished, production-ready Flutter admin dashboard with bilingual support, animated splash experience, and a cohesive green-accented design system.
+A bilingual (English / Arabic) business-intelligence dashboard for Flutter, built on Clean Architecture with Bloc, dependency inversion and a token-driven design system.
+
+[![Flutter](https://img.shields.io/badge/Flutter-3.38-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.10-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![Tests](https://img.shields.io/badge/tests-100%20passing-3fb950)](#testing)
+[![Analyzer](https://img.shields.io/badge/flutter%20analyze-0%20issues-3fb950)](#code-quality)
 
 ---
 
 ## Overview
 
-Damas Dash is a Flutter-based business intelligence dashboard application designed for monitoring key performance metrics. It provides a multi-screen interface covering revenue summaries, analytics overviews, report management, and application settings — all wrapped in a consistent, brand-driven UI built on a centralized design system.
+Damas Dashboard is an admin console for monitoring commercial performance. It presents key metrics with period-over-period comparison, a revenue time series, a recent-activity feed, a searchable report library, and user preferences that persist across launches.
 
-The app launches with a fully animated splash screen, then routes to a persistent shell (app bar + slide-out drawer) that hosts four main sections via an `IndexedStack`.
+Its purpose in this repository is to be a **reference implementation**: a small enough product to read end to end, structured the way a codebase that has to survive several years and several engineers is structured.
+
+Every screen works in both English and Arabic, including right-to-left layout, Arabic-Indic numerals, locale-aware date formats, and correct Arabic plural forms.
+
+> **On the data layer.** The app ships with a bundled JSON data source rather than a live backend. This is a deliberate, isolated choice: the JSON is shaped like an API response, parsed through DTOs, and reached only through repository interfaces. Swapping in a REST client means adding one data source and changing one line of dependency registration — no domain or presentation code changes. See [Remaining work](#remaining-work) for what that implies.
 
 ---
 
 ## Features
 
-- **Animated Splash Screen** — Multi-stage entrance animation with five concurrent `AnimationController`s handling background sweep, logo scale/glow/ring effects, staggered content reveal, and a progress bar; transitions into the home shell via a custom `PageRouteBuilder` fade.
-- **Dashboard Overview** — KPI stat cards (Net Revenue, Subscriptions, Churn Rate, Active Users) rendered in a 2-column `GridView`, an interactive line chart powered by `fl_chart`, and a recent activity feed.
-- **Analytics Screen** — Performance overview section with responsive stat cards (switches from `Row` to `Column` layout below 600px), a performance chart placeholder container, and a recent activity list.
-- **Reports Screen** — Recent reports list with per-item status (ready vs. generating), download action per report, quick action buttons (Generate Report, Export CSV), and a scheduled automated reports section.
-- **Settings Screen** — Grouped settings layout (Account, Preferences, System) with `SettingsTile` for navigable items and `SwitchListTile.adaptive` toggles for Dark Mode and Notifications; constrained to 800px max-width for desktop readability.
-- **Notification Panel** — Overlay popup (`showGeneralDialog`) anchored to the app bar with a scale+fade transition, listing timestamped notification items.
-- **Slide-Out Drawer Navigation** — 260px green-themed sidebar with avatar header, `MENU` section label, animated selected-state highlighting on each `SideBarItem`, and integrated page switching via `IndexedStack`.
-- **Bilingual Typography** — `AppFonts` utility resolves to `Oswald` for English locales and `Almarai` for Arabic, with locale-aware `letterSpacing` and `lineHeight` tuning. The splash screen renders Arabic subtitle text with correct `TextDirection.rtl`.
-- **Centralized Design System** — `AppColors` defines the full green palette: surface layers, primary accents, gradients (background, primary, card, glow), border tokens, and text hierarchy colors.
-- **Glassmorphism App Bar** — `BackdropFilter` blur applied to the app bar for a frosted-glass SaaS aesthetic.
+**Dashboard & analytics**
+- KPI cards with period-over-period deltas that understand direction of *desirability* — falling churn renders as a positive result, not a red one
+- Revenue line chart with labelled axes, touch tooltips and a screen-reader description
+- Recent-activity feed with relative timestamps
 
----
+**Reports**
+- Search, status filter and four sort orders, all applied outside the widget layer
+- Search normalises Arabic orthography, so `احمد` matches `أحمد` and text with diacritics is still findable
+- Delete with a confirmation dialog and undoable-by-refresh semantics
+- Scheduled-report list with locale-aware weekday and time rendering
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | Flutter (Dart) |
-| State Management | `StatefulWidget` + `setState` (local), `IndexedStack` for page persistence |
-| Animation | `AnimationController`, `Tween`, `CurvedAnimation`, `TickerProviderStateMixin` |
-| Charting | `fl_chart` |
-| Typography | Oswald (English), Almarai (Arabic), RobotoCondensed (fallback) |
-| Navigation | Named routes + `Navigator.pushReplacement` + `PageRouteBuilder` |
-| Rendering | `CustomPaint` (arc and grid painters on splash) |
-
----
-
-## Project Structure
-
-```
-lib/
-├── main.dart                        # Entry point — calls runApp(Main())
-├── app.dart                         # MaterialApp: theme, initial route, route table
-│
-├── core/
-│   ├── app_colors.dart              # Complete color palette + gradient definitions
-│   └── app_fonts.dart               # Font resolution by locale + TextStyle factory
-│
-├── dashboard/                       # Dashboard feature module
-│   ├── screens/
-│   │   └── dashboard_screen.dart    # KPI grid, chart, activity feed composition
-│   └── widgets/
-│       ├── dashboard_header.dart    # Page title + subtitle
-│       ├── stat_card.dart           # Metric card with icon, value, trend badge
-│       ├── analytics_chart.dart     # fl_chart LineChart wrapper
-│       ├── activity_section.dart    # Recent activity container
-│       └── activity_tile.dart       # Individual activity row
-│
-├── screens/
-│   ├── home_screen.dart             # Shell: Scaffold + Drawer + AppBar + IndexedStack
-│   ├── analytics_screen.dart        # Analytics page (self-contained with private widgets)
-│   ├── reports_screen.dart          # Reports page (self-contained with private widgets)
-│   └── splash/
-│       ├── splash_screen.dart       # Stateful splash orchestrator + part directive
-│       └── splash_animation.dart    # part of splash_screen — all animation sub-widgets
-│   └── settings/
-│       ├── screens/
-│       │   └── settings_screen.dart # Settings page layout
-│       └── widgets/
-│           ├── settings_group.dart  # Section container with uppercase label
-│           ├── settings_tile.dart   # Navigable list row
-│           ├── settings_toggle.dart # SwitchListTile.adaptive with branded styling
-│           └── settings_footer.dart # Save / Discard action buttons
-│
-└── widgets/                         # Shared, app-wide widgets
-    ├── app_bar.dart                 # Glassmorphism AppBar with notification trigger
-    ├── side_bar.dart                # Drawer: avatar header + navigation items
-    ├── side_bar_items.dart          # Animated SideBarItem with selection state
-    └── windows/
-        └── notification_window.dart # Overlay notification panel
-```
+**Application**
+- Light and dark themes, each designed rather than inverted
+- English / Arabic switching at runtime, with full RTL mirroring
+- Preferences persisted to disk and applied before the first frame — no theme flash on launch
+- Adaptive navigation: drawer on phones, navigation rail from tablet width up
+- Distinct loading, empty, "no matches", and error states with retry throughout
+- Reduced-motion support on the splash sequence
 
 ---
 
 ## Architecture
 
-The project does not implement a formal layered architecture such as Clean Architecture or BLoC. Instead, it follows a **feature-first widget decomposition** pattern with a shared `core/` module:
+The project uses **Clean Architecture with a feature-first layout**. Dependencies point inward: presentation knows about domain, domain knows about nothing.
 
-- **`core/`** acts as a global design token layer. `AppColors` and `AppFonts` are pure utility classes (private constructors / static members only) — no instantiation, no state. All screens consume them directly, ensuring visual consistency without a theming provider.
-- **Feature modules** (`dashboard/`, `screens/settings/`) own both their screen-level composition widget and their constituent sub-widgets. Private widget classes (prefixed with `_`) are co-located inside screen files where they have a single consumer (e.g., `_HeaderSection`, `_StatsGrid` in `analytics_screen.dart`), and promoted to separate files when reused across screens (e.g., `StatCard`, `ActivitySection`).
-- **Navigation** is handled by named routes declared in `app.dart`. The home shell uses `IndexedStack` to preserve widget state across tab switches without rebuilding pages on each visit.
-- **Animation** is self-contained inside `SplashScreen` using `TickerProviderStateMixin`. The `part` / `part of` directive splits the file into logical rendering units (`splash_animation.dart`) while keeping them within the same Dart library scope.
+```mermaid
+flowchart TD
+    subgraph P["Presentation"]
+        Pages["Pages & widgets"]
+        Cubits["Cubits + sealed states"]
+    end
 
-This approach is appropriate for a UI-focused dashboard at this scale and keeps the cognitive overhead low.
+    subgraph D["Domain — pure Dart, no Flutter"]
+        Entities["Entities & business rules"]
+        Contracts["Repository interfaces"]
+        UseCases["Use cases"]
+    end
 
----
+    subgraph Data["Data"]
+        Repos["Repository implementations"]
+        DTOs["DTOs & mappers"]
+        Sources["Data sources"]
+    end
 
-## Getting Started
+    subgraph Core["Core"]
+        DI["DI · Router · Theme · l10n · Result/Failure"]
+    end
 
-### Prerequisites
+    Pages --> Cubits
+    Cubits --> UseCases
+    Cubits --> Contracts
+    UseCases --> Contracts
+    Repos -.implements.-> Contracts
+    Repos --> DTOs
+    DTOs --> Entities
+    Repos --> Sources
 
-- Flutter SDK ≥ 3.x
-- Dart SDK (bundled with Flutter)
-- Android Studio / VS Code with Flutter plugin, or any terminal with `flutter` on PATH
+    Core -.-> P
+    Core -.-> Data
 
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/your-username/damas-dash.git
-cd damas-dash
-
-# Install dependencies
-flutter pub get
+    classDef domain fill:#065F46,stroke:#34D399,color:#ECFDF5
+    classDef other fill:#0B2A20,stroke:#2F463D,color:#D1FAE5
+    class D domain
+    class P,Data,Core other
 ```
 
-### Dependencies
+The inward arrow that matters is the dashed one: `Repos -.implements.-> Contracts`. The data layer depends on the domain, never the reverse. `lib/features/*/domain/` imports nothing from `package:flutter`, no JSON, and no localization.
 
-Ensure `pubspec.yaml` includes the following (verify exact versions in the file):
+That last sentence is not a promise — it is a test. `test/architecture_test.dart` parses every file under `lib/` and fails the build if the domain layer reaches for Flutter, if presentation reaches past the domain into `data/`, if one feature imports another, if `core/` depends on a feature outside the two composition roots, or if a hex color appears outside the palette. It caught a violation in this codebase the first time it ran.
 
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  fl_chart: ^x.x.x       # Line chart rendering on the dashboard
+### How a failure travels
+
+```mermaid
+sequenceDiagram
+    participant DS as Data source
+    participant R as Repository
+    participant C as Cubit
+    participant UI as Widget
+
+    DS->>R: throws CacheException
+    Note over R: guardAsync catches and logs
+    R->>C: Failed(CacheFailure())
+    Note over C: no try/catch anywhere
+    C->>UI: ReportsError(failure)
+    Note over UI: exhaustive switch →<br/>localized message + retry
 ```
 
-Font assets (`Oswald`, `Almarai`, `RobotoCondensed`) must be declared under `flutter.fonts` in `pubspec.yaml` and placed in the `assets/fonts/` directory.
+Exceptions exist only inside the data layer. Everything above it receives a `Result<T>` — a sealed type whose value is unreachable until the failure branch has been handled.
 
----
+### Decisions worth explaining
 
-## Usage
-
-```bash
-# Run on a connected device or emulator
-flutter run
-
-# Build release APK
-flutter build apk --release
-
-# Build for iOS
-flutter build ipa
-```
-
-The app launches into the animated splash screen and automatically navigates to the home shell after ~3 seconds.
-
----
-
-## Screens & UI
-
-### Splash Screen
-Full-screen dark green gradient with five sequenced animations: background radial glow, rotating arc decoration (via `CustomPaint`), logo tile with concentric ring pulse and glow halo, staggered title/subtitle/tagline fade-in with slide offsets, and a progress bar that animates from 0–100% before the transition fires.
-
-### Dashboard (Home)
-Light background (`#F8FAF9`) with a 2×2 KPI grid showing Net Revenue, Subscriptions, Churn Rate, and Active Users — each card carrying a trend badge colored green (positive) or red (negative). Below the grid sits a `fl_chart` line chart and a recent activity list of payment/order tiles.
-
-### Analytics
-Responsive stat grid (3 cards: Total Users, Revenue, Growth) that collapses from a `Row` to a `Column` on viewports below 600px. Includes a performance chart placeholder section and a recent activity feed with timestamped items.
-
-### Reports
-Two quick-action buttons (Generate Report, Export CSV), a recent reports list with file metadata and per-item download buttons, and a scheduled reports section showing recurring report configurations with recipient email.
-
-### Settings
-Grouped into Account (Profile, Security), Preferences (Dark Mode toggle, Notifications toggle), and System (About, Help & Support). Max-width constrained at 800px. Footer provides Save Changes and Discard Changes actions.
-
-### Notification Panel
-Dropdown overlay triggered from the app bar bell icon. Renders with a combined scale+fade `transitionBuilder`, anchored top-center, listing three notification items with timestamps.
-
----
-
-## Key Dependencies
-
-| Package | Purpose |
+| Decision | Reasoning |
 |---|---|
-| `fl_chart` | Line chart visualization on the dashboard screen |
-| `flutter` (SDK) | Core framework, widgets, animation, and rendering |
-
-> Font packages (Oswald, Almarai, RobotoCondensed) are loaded as local asset fonts, not pub packages.
-
----
-
-## Code Quality Notes
-
-- `AppColors` and `AppFonts` are well-designed as sealed utility classes — private constructors prevent misuse, and the locale-aware `getTextStyle()` factory in `AppFonts` is a production-grade pattern.
-- The `SettingsToggle` component is correctly decoupled via `ValueChanged<bool>` — it holds no internal state, making it trivially integrable with any state management solution.
-- `SideBarItem` uses `AnimatedContainer` for smooth selection transitions, which is preferable to abrupt color swaps.
-- The splash screen correctly disposes all five `AnimationController`s in `dispose()`, preventing common memory leaks associated with `TickerProviderStateMixin`.
-- The `part` / `part of` split in the splash module is a clean approach to managing file length without introducing unnecessary separate libraries.
-- Toggle callbacks in `SettingsScreen` (`onChanged`) are stubs — wired to the UI structure but not yet connected to any state management layer.
-- `ActivityTile` is currently rendered with a hardcoded `index: 0` in the `List.generate` call inside `ActivitySection`, which prevents dynamic data from flowing through correctly.
+| **Cubit, not Bloc** | These screens react to method calls, not to a stream of domain events. Events would add a class per interaction and buy nothing. |
+| **Use cases only where they earn it** | `GetAnalyticsSnapshot` exists because it runs three reads concurrently and collapses them into one result. `FilterReports` exists because search/sort/filter is real, testable logic. A use case that only forwards `repository.getX()` was not written — the cubit calls the repository directly. |
+| **Hand-written `Result`/`Failure`** | ~90 lines of sealed classes with exhaustive pattern matching. `dartz` or `fpdart` would add a dependency and a vocabulary (`Either`, `fold`, `bimap`) for no additional safety here. |
+| **Failures carry no message** | The domain does not know which language the user reads. `Failure` is a type; `failure_presenter.dart` turns it into text. Adding a variant breaks that exhaustive switch at compile time. |
+| **Injected `Clock`** | Nothing calls `DateTime.now()` directly, so relative timestamps and sort order are testable against a frozen clock. |
+| **Splash has no domain layer** | It fetches nothing and decides nothing. Giving it a repository for symmetry would be architecture for its own sake. |
+| **`labelOf` passed into `FilterReports`** | Search must match what the user sees. Passing a resolver keeps translation out of the domain while letting Arabic search work on Arabic labels. |
+| **Semantic colors as a `ThemeExtension`** | "Positive" and "negative" have no home in Material's `ColorScheme`, and hard-coding green/red breaks in dark mode. |
 
 ---
 
-## Future Improvements
+## Tech stack
 
-Based on the code structure, the following extensions are natural next steps:
+| Concern | Choice |
+|---|---|
+| Framework | Flutter 3.38 · Dart 3.10 |
+| State management | `flutter_bloc` (Cubit) with sealed states |
+| Navigation | `go_router` with `StatefulShellRoute` |
+| Dependency injection | `get_it`, read only at composition roots |
+| Persistence | `shared_preferences` |
+| Localization | `flutter_localizations` + ARB (`gen-l10n`), en + ar |
+| Formatting | `intl` — numbers, currency, dates, plurals |
+| Charts | `fl_chart` |
+| Value equality | `equatable` |
+| Testing | `flutter_test` with hand-written fakes |
 
-- **State Management Integration** — The settings toggles and sidebar selection state are architected to accept external state. Integrating `Provider`, `Riverpod`, or `Bloc` would complete the wiring without requiring widget restructuring.
-- **Dark Mode** — `AppColors` already defines a full dark-surface palette (`surfaceDark`, `surfaceLight`, `card`, `cardElevated`). Connecting the existing Dark Mode toggle to a `ThemeMode` provider would be straightforward.
-- **Dynamic Data Layer** — All KPI values, chart data points, activity items, and report lists are currently hardcoded. The widget APIs are already parameterized and ready for a repository/service layer.
-- **Chart Axes & Interactivity** — The `fl_chart` instance has `titlesData` and axis labels disabled. Enabling touch interaction and labeled axes would complete the analytics experience.
-- **Localization** — `AppFonts` already resolves by `Locale`. Full `flutter_localizations` + ARB file integration would complete the bilingual (Arabic/English) support indicated by the font system.
+Seven runtime dependencies, each used for something the SDK does not provide. `cupertino_icons` shipped with the Flutter template and was removed — nothing imported it.
+
+---
+
+## Project structure
+
+```
+lib/
+├── main.dart                      # Single call into bootstrap
+├── app/
+│   ├── bootstrap.dart             # Composition root: DI, error handlers, first paint
+│   ├── app.dart                   # MaterialApp.router, theme + locale resolution
+│   └── shell/                     # Persistent frame: one Scaffold, adaptive nav
+│
+├── core/
+│   ├── config/                    # Build constants, dart-define surface
+│   ├── data/                      # JSON reading and strict parsing helpers
+│   ├── di/injector.dart           # All registrations, grouped per feature
+│   ├── error/                     # Exceptions (data), Failures (domain), presenter
+│   ├── extensions/                # context.l10n, context.colors, breakpoints
+│   ├── l10n/                      # ARB sources + relative-time formatting
+│   ├── result/                    # Result<T> and guardAsync
+│   ├── router/                    # Routes, router, unknown-route page
+│   ├── theme/                     # Palette, tokens, typography, ThemeData
+│   ├── utils/                     # Clock, logger, formatters, search normalisation
+│   └── widgets/                   # Cross-feature primitives
+│
+└── features/
+    ├── analytics/                 # Metrics, revenue series, activity
+    │   ├── data/                  #   datasources · models · repositories
+    │   ├── domain/                #   entities · repositories · usecases
+    │   └── presentation/          #   cubit · pages · widgets
+    ├── reports/                   # Report library, search/filter/sort, delete
+    ├── notifications/             # Notification panel and unread badge
+    ├── settings/                  # Theme and language preferences
+    └── splash/                    # Presentation only — nothing to abstract
+```
+
+`assets/data/` holds the seed payloads. Their shape is the contract a real backend would implement.
+
+---
+
+## Screenshots
+
+| Dashboard (light) | Dashboard (dark) |
+|---|---|
+| _add `docs/screenshots/dashboard-light.png`_ | _add `docs/screenshots/dashboard-dark.png`_ |
+
+| Reports — search & filter | Arabic (RTL) |
+|---|---|
+| _add `docs/screenshots/reports.png`_ | _add `docs/screenshots/arabic-rtl.png`_ |
+
+| Tablet — navigation rail | Error & empty states |
+|---|---|
+| _add `docs/screenshots/tablet.png`_ | _add `docs/screenshots/states.png`_ |
+
+---
+
+## Getting started
+
+**Requirements** — Flutter 3.38 or newer (Dart 3.10+). Check with `flutter --version`.
+
+```bash
+git clone <repository-url>
+cd damas_dashboard
+
+# Installs packages and runs gen-l10n, because pubspec sets `generate: true`.
+flutter pub get
+
+flutter run
+```
+
+Localizations under `lib/core/l10n/generated/` are generated, not committed. `flutter pub get` produces them; to regenerate by hand, run `flutter gen-l10n`.
+
+### Configuration
+
+There are no secrets in this repository and nothing to configure to run it. Runtime configuration uses compile-time defines:
+
+```bash
+flutter run --dart-define=API_BASE_URL=https://api.example.com
+```
+
+Read through `lib/core/config/app_config.dart`. Files that would carry credentials (`key.properties`, `google-services.json`, `.env`) are gitignored.
+
+---
+
+## Testing
+
+```bash
+flutter test                       # 100 tests
+flutter test --coverage
+```
+
+| Area | Covered |
+|---|---|
+| **Architecture rules** | Layer boundaries, feature isolation, no `print`, no stray hex colors |
+| `Result` / `Failure` | Branch selection, `map`/`fold`, value equality |
+| Arabic search normalisation | Alef/hamza folding, teh marbuta, tashkeel, tatweel |
+| `Metric` business rules | Trend, favourability under `lowerIsBetter`, float-noise threshold, null baseline |
+| `GetAnalyticsSnapshot` | Concurrency, failure propagation from each branch |
+| `AnalyticsRepositoryImpl` | DTO mapping, sorting, windowing, exception → failure |
+| `FilterReports` | Filter, search (both languages), four sorts, immutability |
+| `ReportsCubit` | State machine, debounce, delete, refresh, emit-after-close |
+| `SettingsCubit` | Persistence, no-op writes, failure behaviour |
+| `MetricCard` | Formatting, translation, trend tone, semantics, overflow |
+| `ReportsPage` | Loading → error → retry → loaded → filter → search → delete, plus RTL |
+
+Fakes are hand-written rather than generated: the contracts are small, and the assertions are about behaviour rather than about which methods were called.
+
+---
+
+## Code quality
+
+```bash
+flutter analyze                    # 0 issues
+dart format --set-exit-if-changed lib test
+```
+
+`analysis_options.yaml` enables strict casts, strict inference and strict raw types, and promotes `use_build_context_synchronously`, `unawaited_futures`, `avoid_print` and dead-code detection from lint to **error**.
+
+Three lints are deliberately off, each with the reason recorded in the file: `always_put_required_named_parameters_first` and `prefer_expression_function_bodies` fight Flutter's own conventions, and `require_trailing_commas` disagrees with `dart format`.
+
+---
+
+## Building
+
+```bash
+flutter build apk --debug
+flutter build apk --release        # R8 enabled; signs with the debug key
+flutter build web --release
+```
+
+Release signing uses the debug key so the project builds from a fresh clone. Shipping requires a real upload key in `android/key.properties`.
+
+**Android toolchain.** The Android build did not work at all before this pass: the project pinned Android Gradle Plugin 8.1.0, below Flutter's supported minimum of 8.1.1, so Gradle failed while applying the Flutter plugin — `flutter build apk` could not produce an artifact at any point. AGP is now 8.7.3 with Gradle 8.9, Kotlin 2.1.0 and Java 11. `android.enableJetifier` was switched off (no dependency ships support-library code, and AGP 9 removes the flag), `applicationId` moved off the `com.example.*` placeholder, and the app label reads "Damas Dashboard" rather than the raw package name.
+
+---
+
+## Remaining work
+
+Honest list of what this repository does not do.
+
+- **No backend.** Data comes from bundled JSON. Report deletion mutates an in-memory copy and does not survive a restart. Pagination, caching, retry/backoff and token refresh are unimplemented because there is nothing to page, cache or authenticate against.
+- **No authentication.** There are no roles, guards or sessions. `go_router`'s `redirect` is where a guard would attach.
+- **"Generate report", "Export CSV", "Profile", "Security", "Help"** show an explicit "not available in this build" message rather than pretending to work.
+- **No integration tests.** The `ReportsPage` widget test covers the fullest user journey (load → filter → search → delete → confirm). A true `integration_test/` suite needs a driver target and a device.
+- **The Android *release* build has not completed locally.** `flutter build apk --debug` succeeds on the current toolchain. The release variant reaches `:app:compileReleaseKotlin` and then fails downloading Flutter's per-ABI release engine JARs from `storage.googleapis.com` — a flaky-network symptom on the development machine rather than a project defect (the debug build hit the same error and succeeded on Flutter's automatic retry). R8 and resource shrinking are therefore configured but not yet exercised; the CI workflow builds the release APK on push, which is where that gets covered.
+- **iOS, macOS, Linux and Windows are unverified.** Only Android and web builds were run. No platform-specific code is used, so they are expected to work.
+- **Arabic translations are unreviewed.** They are the author's own and have not been checked by a native-speaking reviewer.
+- **`fl_chart` is pinned to 0.66.** 1.x is available; the upgrade is a small API migration that was left out of this pass to keep the diff reviewable.
+- **App version is a constant** in `app_config.dart` that must be kept in step with `pubspec.yaml`. Reading it at runtime would mean adding `package_info_plus` for one string.

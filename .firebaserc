@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "syria-souq-c8a72",
+    "n": "syria-souq-c8a72"
+  },
+  "targets": {
+    "syria-souq-c8a72": {
+      "hosting": {
+        "dashboard": [
+          "damas-dashboard"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

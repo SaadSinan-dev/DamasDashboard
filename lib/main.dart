@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-import 'app.dart';
+import 'app/bootstrap.dart';
 
-
-void main() {
-  runApp(const Main());
-}
-
-
+void main() => bootstrap();

@@ -1,0 +1,236 @@
+{
+  "@@locale": "ar",
+
+  "appTitle": "لوحة دماس",
+  "appTagline": "ذكاء الأعمال لإدارة بياناتك",
+  "appEdition": "نسخة المؤسسات",
+
+  "navDashboard": "لوحة التحكم",
+  "navAnalytics": "التحليلات",
+  "navReports": "التقارير",
+  "navSettings": "الإعدادات",
+  "navMenuLabel": "القائمة",
+  "navProfileName": "ملفي الشخصي",
+  "navProfileRole": "مدير النظام",
+
+  "actionRetry": "إعادة المحاولة",
+  "actionRefresh": "تحديث",
+  "actionCancel": "إلغاء",
+  "actionClose": "إغلاق",
+  "actionSave": "حفظ التغييرات",
+  "actionDiscard": "تجاهل",
+  "actionDelete": "حذف",
+  "actionDownload": "تنزيل",
+  "actionViewAll": "عرض الكل",
+  "actionClearSearch": "مسح البحث",
+
+  "a11yOpenNavigation": "فتح قائمة التنقل",
+  "a11yOpenNotifications": "فتح الإشعارات",
+  "a11yClosePanel": "إغلاق اللوحة",
+  "a11yTrendUp": "ارتفاع بنسبة {delta} مقارنة بالفترة السابقة",
+  "@a11yTrendUp": {
+    "placeholders": { "delta": { "type": "String" } }
+  },
+  "a11yTrendDown": "انخفاض بنسبة {delta} مقارنة بالفترة السابقة",
+  "@a11yTrendDown": {
+    "placeholders": { "delta": { "type": "String" } }
+  },
+  "a11yRevenueChart": "رسم بياني خطي لصافي الإيرادات خلال آخر {count} أشهر",
+  "@a11yRevenueChart": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "errorNetworkTitle": "مشكلة في الاتصال",
+  "errorNetworkBody": "تعذّر الوصول إلى الخادم. تحقّق من اتصالك ثم أعد المحاولة.",
+  "errorCacheTitle": "مشكلة في التخزين",
+  "errorCacheBody": "تعذّرت قراءة البيانات المحفوظة على هذا الجهاز.",
+  "errorNotFoundTitle": "غير موجود",
+  "errorNotFoundBody": "العنصر الذي تبحث عنه لم يعد موجودًا.",
+  "errorUnexpectedTitle": "حدث خطأ ما",
+  "errorUnexpectedBody": "وقع خطأ غير متوقّع. يُرجى المحاولة مرة أخرى.",
+  "errorValidationTitle": "تحقّق من المدخلات",
+  "errorRouteTitle": "الصفحة غير موجودة",
+  "errorRouteBody": "لا توجد صفحة مطابقة لـ {location}.",
+  "@errorRouteBody": {
+    "placeholders": { "location": { "type": "String" } }
+  },
+  "errorGoHome": "العودة إلى لوحة التحكم",
+
+  "dashboardTitle": "نظرة عامة",
+  "dashboardSubtitle": "مراقبة فورية وذكاء أعمال",
+  "analyticsTitle": "التحليلات",
+  "analyticsSubtitle": "نظرة عامة على أداء النظام والمؤشرات",
+
+  "metricNetRevenue": "صافي الإيرادات",
+  "metricSubscriptions": "الاشتراكات",
+  "metricChurnRate": "معدّل الإلغاء",
+  "metricActiveUsers": "المستخدمون النشطون",
+  "metricTotalUsers": "إجمالي المستخدمين",
+  "metricGrowth": "النمو",
+  "metricComparisonCaption": "مقارنة بالفترة السابقة",
+
+  "revenueChartTitle": "صافي الإيرادات",
+  "revenueChartSubtitle": "آخر {count} أشهر",
+  "@revenueChartSubtitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "recentActivityTitle": "النشاط الأخير",
+  "activityPaymentTitle": "تم استلام دفعة",
+  "activityPaymentBody": "{amount} من {actor}",
+  "@activityPaymentBody": {
+    "placeholders": {
+      "amount": { "type": "String" },
+      "actor": { "type": "String" }
+    }
+  },
+  "activitySignupTitle": "تسجيل جديد",
+  "activitySignupBody": "انضم {actor} إلى مساحة العمل",
+  "@activitySignupBody": {
+    "placeholders": { "actor": { "type": "String" } }
+  },
+  "activityReportTitle": "التقرير جاهز",
+  "activityReportBody": "أنشأه {actor}",
+  "@activityReportBody": {
+    "placeholders": { "actor": { "type": "String" } }
+  },
+  "activityAlertTitle": "تنبيه النظام",
+  "activityAlertBody": "صادر عن {actor}",
+  "@activityAlertBody": {
+    "placeholders": { "actor": { "type": "String" } }
+  },
+
+  "emptyActivityTitle": "لا يوجد نشاط بعد",
+  "emptyActivityBody": "ستظهر الأحداث هنا فور وقوعها.",
+
+  "reportsTitle": "التقارير",
+  "reportsSubtitle": "إنشاء التقارير وتنزيلها وجدولتها",
+  "reportsRecentTitle": "أحدث التقارير",
+  "reportsScheduledTitle": "التقارير المجدولة",
+  "reportsSearchHint": "ابحث في التقارير",
+  "reportsGenerate": "إنشاء تقرير",
+  "reportsExportCsv": "تصدير كل البيانات",
+
+  "reportKindFinancialSummary": "الملخّص المالي الربعي",
+  "reportKindUserEngagement": "مؤشرات تفاعل المستخدمين",
+  "reportKindServerAudit": "التدقيق السنوي للخوادم",
+  "reportKindRevenueSync": "مزامنة الإيرادات الأسبوعية",
+  "reportKindChurnBreakdown": "تفصيل معدّل الإلغاء",
+
+  "reportStatusReady": "جاهز",
+  "reportStatusGenerating": "قيد الإنشاء",
+  "reportStatusFailed": "فشل",
+
+  "reportFilterAll": "الكل",
+  "reportFilterReady": "جاهز",
+  "reportFilterGenerating": "قيد الإنشاء",
+  "reportFilterFailed": "فشل",
+
+  "reportSortLabel": "ترتيب",
+  "reportSortNewest": "الأحدث أولًا",
+  "reportSortOldest": "الأقدم أولًا",
+  "reportSortName": "الاسم (أ–ي)",
+  "reportSortLargest": "الأكبر حجمًا أولًا",
+
+  "reportGeneratedOn": "أُنشئ في {date}",
+  "@reportGeneratedOn": {
+    "placeholders": {
+      "date": { "type": "DateTime", "format": "yMMMd" }
+    }
+  },
+  "reportSizePending": "جارٍ تقدير الحجم",
+  "reportMetaSeparator": " • ",
+
+  "reportDeleteTitle": "حذف هذا التقرير؟",
+  "reportDeleteBody": "سيُحذف «{name}» نهائيًا، ولا يمكن التراجع عن ذلك.",
+  "@reportDeleteBody": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "reportDeleted": "تم حذف «{name}»",
+  "@reportDeleted": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "reportDownloadStarted": "جارٍ تنزيل «{name}»",
+  "@reportDownloadStarted": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+
+  "emptyReportsTitle": "لا توجد تقارير بعد",
+  "emptyReportsBody": "أنشئ تقريرك الأول ليظهر هنا.",
+  "emptySearchTitle": "لا توجد نتائج",
+  "emptySearchBody": "لا توجد تقارير تطابق «{query}». جرّب بحثًا أو تصفية مختلفة.",
+  "@emptySearchBody": {
+    "placeholders": { "query": { "type": "String" } }
+  },
+
+  "scheduleWeekly": "كل {weekday} الساعة {time}",
+  "@scheduleWeekly": {
+    "placeholders": {
+      "weekday": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "scheduleRecipient": "يُرسل إلى {email}",
+  "@scheduleRecipient": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "emptyScheduledTitle": "لا توجد جدولة",
+  "emptyScheduledBody": "ستُدرج هنا التقارير الآلية التي تجدولها.",
+
+  "notificationsTitle": "الإشعارات",
+  "notificationsMarkAllRead": "تعليم الكل كمقروء",
+  "notificationsUnread": "{count, plural, =0{لا إشعارات غير مقروءة} =1{إشعار واحد غير مقروء} =2{إشعاران غير مقروءين} few{{count} إشعارات غير مقروءة} many{{count} إشعارًا غير مقروء} other{{count} إشعار غير مقروء}}",
+  "@notificationsUnread": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "emptyNotificationsTitle": "لا جديد لديك",
+  "emptyNotificationsBody": "ستظهر الإشعارات الجديدة هنا.",
+
+  "settingsTitle": "الإعدادات",
+  "settingsSubtitle": "إدارة إعدادات مساحة العمل",
+  "settingsSectionAppearance": "المظهر",
+  "settingsSectionAccount": "الحساب",
+  "settingsSectionSystem": "النظام",
+
+  "settingsTheme": "السمة",
+  "settingsThemeSubtitle": "اختر شكل لوحة التحكم",
+  "settingsThemeSystem": "حسب النظام",
+  "settingsThemeLight": "فاتح",
+  "settingsThemeDark": "داكن",
+
+  "settingsLanguage": "اللغة",
+  "settingsLanguageSubtitle": "لغة الواجهة واتجاه النص",
+  "settingsLanguageSystem": "لغة النظام",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageArabic": "العربية",
+
+  "settingsProfile": "الملف الشخصي",
+  "settingsProfileSubtitle": "تحديث بياناتك الشخصية",
+  "settingsSecurity": "الأمان",
+  "settingsSecuritySubtitle": "كلمة المرور والمصادقة",
+  "settingsAbout": "حول التطبيق",
+  "settingsAboutSubtitle": "الإصدار {version}",
+  "@settingsAboutSubtitle": {
+    "placeholders": { "version": { "type": "String" } }
+  },
+  "settingsHelp": "المساعدة والدعم",
+  "settingsHelpSubtitle": "التوثيق والتواصل",
+  "settingsNotAvailable": "{feature} غير متاح في هذه النسخة",
+  "@settingsNotAvailable": {
+    "placeholders": { "feature": { "type": "String" } }
+  },
+
+  "timeJustNow": "الآن",
+  "timeMinutesAgo": "{count, plural, =1{قبل دقيقة} =2{قبل دقيقتين} few{قبل {count} دقائق} many{قبل {count} دقيقة} other{قبل {count} دقيقة}}",
+  "@timeMinutesAgo": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "timeHoursAgo": "{count, plural, =1{قبل ساعة} =2{قبل ساعتين} few{قبل {count} ساعات} many{قبل {count} ساعة} other{قبل {count} ساعة}}",
+  "@timeHoursAgo": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "timeDaysAgo": "{count, plural, =1{أمس} =2{قبل يومين} few{قبل {count} أيام} many{قبل {count} يومًا} other{قبل {count} يوم}}",
+  "@timeDaysAgo": {
+    "placeholders": { "count": { "type": "int" } }
+  }
+}

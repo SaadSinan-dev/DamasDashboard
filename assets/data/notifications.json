@@ -1,0 +1,10 @@
+{
+  "_comment": "Seed data for the bundled local data source.",
+  "notifications": [
+    { "id": "ntf_001", "kind": "signup", "actor": "Omar Haddad", "minutesAgo": 2, "isRead": false },
+    { "id": "ntf_002", "kind": "payment", "actor": "Sarah Nassar", "minutesAgo": 11, "isRead": false },
+    { "id": "ntf_003", "kind": "reportReady", "actor": "Scheduler", "minutesAgo": 64, "isRead": false },
+    { "id": "ntf_004", "kind": "systemAlert", "actor": "eu-west-1", "minutesAgo": 190, "isRead": true },
+    { "id": "ntf_005", "kind": "payment", "actor": "Layla Khoury", "minutesAgo": 1510, "isRead": true }
+  ]
+}

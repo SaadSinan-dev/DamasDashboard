@@ -1,0 +1,75 @@
+{
+  "_comment": "Seed data for the bundled local data source. Timestamps are expressed as offsets from 'now' so the demo never looks stale. Replace this file with a REST client to go live; the DTO shapes below are the contract.",
+  "metrics": {
+    "dashboard": [
+      { "id": "netRevenue", "value": 84200.0, "previousValue": 73730.0 },
+      { "id": "subscriptions", "value": 1240.0, "previousValue": 1180.0 },
+      { "id": "churnRate", "value": 2.4, "previousValue": 3.2 },
+      { "id": "activeUsers", "value": 12400.0, "previousValue": 11450.0 }
+    ],
+    "analytics": [
+      { "id": "totalUsers", "value": 24802.0, "previousValue": 22145.0 },
+      { "id": "netRevenue", "value": 142400.0, "previousValue": 131365.0 },
+      { "id": "growth", "value": 22.5, "previousValue": 22.06 },
+      { "id": "churnRate", "value": 2.4, "previousValue": 3.2 }
+    ]
+  },
+  "revenueSeries": [
+    { "monthsAgo": 11, "amount": 41200.0 },
+    { "monthsAgo": 10, "amount": 44800.0 },
+    { "monthsAgo": 9, "amount": 43100.0 },
+    { "monthsAgo": 8, "amount": 49600.0 },
+    { "monthsAgo": 7, "amount": 52300.0 },
+    { "monthsAgo": 6, "amount": 50100.0 },
+    { "monthsAgo": 5, "amount": 58700.0 },
+    { "monthsAgo": 4, "amount": 61200.0 },
+    { "monthsAgo": 3, "amount": 59400.0 },
+    { "monthsAgo": 2, "amount": 67800.0 },
+    { "monthsAgo": 1, "amount": 71500.0 },
+    { "monthsAgo": 0, "amount": 84200.0 }
+  ],
+  "activity": [
+    {
+      "id": "act_001",
+      "type": "payment",
+      "actor": "Sarah Nassar",
+      "minutesAgo": 2,
+      "amount": 2400.0
+    },
+    {
+      "id": "act_002",
+      "type": "signup",
+      "actor": "Omar Haddad",
+      "minutesAgo": 47,
+      "amount": null
+    },
+    {
+      "id": "act_003",
+      "type": "reportReady",
+      "actor": "Scheduler",
+      "minutesAgo": 96,
+      "amount": null
+    },
+    {
+      "id": "act_004",
+      "type": "payment",
+      "actor": "Layla Khoury",
+      "minutesAgo": 310,
+      "amount": 860.0
+    },
+    {
+      "id": "act_005",
+      "type": "systemAlert",
+      "actor": "eu-west-1",
+      "minutesAgo": 1450,
+      "amount": null
+    },
+    {
+      "id": "act_006",
+      "type": "signup",
+      "actor": "Karim Aziz",
+      "minutesAgo": 2880,
+      "amount": null
+    }
+  ]
+}

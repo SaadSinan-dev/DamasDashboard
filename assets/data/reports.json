@@ -1,0 +1,63 @@
+{
+  "_comment": "Seed data for the bundled local data source. Reserved .example addresses (RFC 2606) are used so no real mailbox is implied.",
+  "reports": [
+    {
+      "id": "rep_001",
+      "kind": "financialSummary",
+      "format": "pdf",
+      "sizeBytes": 2516582,
+      "status": "ready",
+      "generatedMinutesAgo": 340
+    },
+    {
+      "id": "rep_002",
+      "kind": "userEngagement",
+      "format": "csv",
+      "sizeBytes": 1153434,
+      "status": "ready",
+      "generatedMinutesAgo": 3120
+    },
+    {
+      "id": "rep_003",
+      "kind": "serverAudit",
+      "format": "pdf",
+      "sizeBytes": null,
+      "status": "generating",
+      "generatedMinutesAgo": 12
+    },
+    {
+      "id": "rep_004",
+      "kind": "churnBreakdown",
+      "format": "xlsx",
+      "sizeBytes": 845321,
+      "status": "ready",
+      "generatedMinutesAgo": 7200
+    },
+    {
+      "id": "rep_005",
+      "kind": "revenueSync",
+      "format": "csv",
+      "sizeBytes": null,
+      "status": "failed",
+      "generatedMinutesAgo": 10080
+    }
+  ],
+  "scheduled": [
+    {
+      "id": "sch_001",
+      "kind": "revenueSync",
+      "weekday": 1,
+      "hour": 8,
+      "minute": 0,
+      "recipient": "ops@damas.example"
+    },
+    {
+      "id": "sch_002",
+      "kind": "financialSummary",
+      "weekday": 5,
+      "hour": 17,
+      "minute": 30,
+      "recipient": "finance@damas.example"
+    }
+  ]
+}
